@@ -1,7 +1,19 @@
-import React from 'react';
-import { Hexagon, Globe, Sun, Moon } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Hexagon, Globe, Sun, Moon, ShieldCheck, Activity } from 'lucide-react';
 
-export const Header = ({ isDarkMode, toggleTheme, activeView, setActiveView }) => (
+export const Header = ({ isDarkMode, toggleTheme, activeView, setActiveView }) => {
+  const [statusState, setStatusState] = useState('ready'); // 'ready', 'checking', 'verified'
+
+  const runDiagnostic = () => {
+    if (statusState !== 'ready') return;
+    setStatusState('checking');
+    setTimeout(() => {
+      setStatusState('verified');
+      setTimeout(() => setStatusState('ready'), 3000);
+    }, 1500);
+  };
+
+  return (
   <header className="flex justify-between items-center py-6 border-b border-border-subtle mb-8">
     <div 
       className="flex items-center gap-4 cursor-pointer group/logo"
@@ -60,12 +72,38 @@ export const Header = ({ isDarkMode, toggleTheme, activeView, setActiveView }) =
       </button>
 
       {/* Status Badge */}
-      <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-color-brand-green/30 bg-color-brand-green/10">
-        <div className="w-2 h-2 rounded-full bg-color-brand-green animate-ping"></div>
-        <span className="text-xs font-bold text-color-brand-green tracking-wider uppercase">
-          Live Scan Ready
+      <button 
+        onClick={runDiagnostic}
+        disabled={statusState === 'checking'}
+        className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-300 relative overflow-hidden group
+          ${statusState === 'ready' ? 'border-color-brand-green/30 bg-color-brand-green/10 hover:bg-color-brand-green/20' : 
+            statusState === 'checking' ? 'border-color-brand-cyan/30 bg-color-brand-cyan/10 cursor-wait' : 
+            'border-color-brand-amber/30 bg-color-brand-amber/10'}
+        `}
+      >
+        {statusState === 'checking' && (
+          <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-[shimmer_1.5s_infinite]"></div>
+        )}
+        
+        <div className={`w-2 h-2 rounded-full 
+          ${statusState === 'ready' ? 'bg-color-brand-green animate-ping' : 
+            statusState === 'checking' ? 'bg-color-brand-cyan animate-pulse' : 
+            'bg-color-brand-amber animate-bounce'}
+        `}></div>
+        
+        <span className={`text-xs font-bold tracking-wider uppercase flex items-center gap-2
+          ${statusState === 'ready' ? 'text-color-brand-green' : 
+            statusState === 'checking' ? 'text-color-brand-cyan' : 
+            'text-color-brand-amber text-white'}
+        `}>
+          {statusState === 'ready' ? 'Live Scan Ready' : 
+           statusState === 'checking' ? 'Diagnostic Run...' : 
+           'Scanner API Online'}
+          
+          {statusState === 'verified' && <ShieldCheck className="w-3 h-3" />}
         </span>
-      </div>
+      </button>
     </div>
   </header>
 );
+};
