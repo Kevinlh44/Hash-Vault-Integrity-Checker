@@ -166,8 +166,8 @@ export const ScanPanel = ({ onScanFile, onScanUrl, isScanning, scanResult }) => 
           ${((mode === 'file' && !file) || (mode === 'url' && !url) || isScanning) 
             ? 'bg-bg-surface text-text-muted cursor-not-allowed border border-border-subtle'
             : mode === 'file' 
-              ? 'bg-color-brand-violet/10 text-color-brand-violet border border-color-brand-violet hover:bg-color-brand-violet hover:text-[#04061a] hover:scale-[1.02] active:scale-[0.98]'
-              : 'bg-color-brand-cyan/10 text-color-brand-cyan border border-color-brand-cyan hover:bg-color-brand-cyan hover:text-[#04061a] hover:scale-[1.02] active:scale-[0.98]'}
+              ? 'bg-color-brand-violet/10 text-color-brand-violet border border-color-brand-violet hover:bg-color-brand-violet/30 hover:shadow-[0_0_20px_rgba(176,38,255,0.3)] hover:scale-[1.02] active:scale-[0.98]'
+              : 'bg-color-brand-cyan/10 text-color-brand-cyan border border-color-brand-cyan hover:bg-color-brand-cyan/30 hover:shadow-[0_0_20px_rgba(0,240,255,0.3)] hover:scale-[1.02] active:scale-[0.98]'}
         `}
       >
         {isScanning ? 'Scan in Progress...' : 'Initiate Scan'}
